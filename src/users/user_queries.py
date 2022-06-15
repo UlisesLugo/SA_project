@@ -7,6 +7,10 @@ class UserQueries():
         try:
             session.add(user)
             session.commit()
-            return True
+            return True, ""
         except Exception as e:
-            return False
+            if "username" in str(e.__cause__):
+                return False, "Username is duplicated, please change."
+            if "email" in str(e.__cause__):
+                return False, "Email already exists, please change."
+            return False, "Error creating user, please try again."

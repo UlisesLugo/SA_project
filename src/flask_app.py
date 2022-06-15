@@ -5,6 +5,7 @@ from users.token_generator import generate_token
 from users.user_builder import UserBuilder
 from users.user_queries import UserQueries
 from movies.movie_queries import MovieQueries
+from movies.movie_matcher import MovieMatcher
 from db_intializer import DBInitializer
 
 app = Flask(__name__)
@@ -43,8 +44,12 @@ def register():
     email = args.get('email')
     preferences = args.get('preferences')
 
-    if(username is None or email is None or preferences is None):
+    if username is None or email is None or preferences is None:
         return 'Username, email and preferences are required for registering', 400
+
+    isValidPreferences, errorPreferences = MovieMatcher.validate_preferences(preferences)
+    if not isValidPreferences:
+        return errorPreferences, 400
 
     token = generate_token()
     user = (UserBuilder()
@@ -54,8 +59,8 @@ def register():
             .token(token)
             .build())
 
-    result = UserQueries.add_user(user)
-    
+    result, errorMessage = UserQueries.add_user(user)
+
     if result :
         response = app.response_class(
             response=json.dumps(user.to_dict()),
@@ -63,6 +68,6 @@ def register():
             mimetype='application/json'
         )
     else:
-        response = "Username duplicated, please change", 400
+        response = errorMessage, 400
 
     return response
