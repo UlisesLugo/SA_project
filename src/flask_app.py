@@ -3,9 +3,11 @@ import models
 from flask import Flask, request, json
 from database_session import DatabaseSession
 from movies.movie_queries import MovieQueries
+from db_intializer import DBInitializer
 
 app = Flask(__name__)
 models.start_mappers()
+DBInitializer.initialize_db()
 
 @app.route("/hello", methods=["GET"])
 def hello_world():

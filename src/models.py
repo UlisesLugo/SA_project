@@ -1,6 +1,3 @@
-import csv
-import os
-from datetime import datetime
 from sqlalchemy import (
     MetaData,
     Column,
@@ -40,18 +37,3 @@ class User(Base):
 def start_mappers():
     session = DatabaseSession()
     Base.metadata.create_all(session.engine)
-
-    if session.query(Movie).first() is None:
-        base_dir = os.path.dirname(os.path.realpath(__file__))
-        with open(f"{base_dir}/movie_results.csv", "r") as movies_csv:
-            csv_reader = csv.DictReader(movies_csv, skipinitialspace=True)
-            for i, row in enumerate(csv_reader):
-                session.add(Movie(
-                    movie_id=i,
-                    preference_key=int(row["preference_key"]),
-                    movie_title=row["movie_title"],
-                    rating=float(row["rating"]),
-                    year=int(row["year"]),
-                    create_time=datetime.now(),
-                ))
-        session.commit()
