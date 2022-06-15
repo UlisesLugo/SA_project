@@ -13,7 +13,7 @@ class UserValidator():
             return "preferences are required for registering", 400
         
         if not isinstance(preferences, list) or len(preferences) != 3:
-            return False, "Preferences has to be a list of 3 elements"
+            return False, "preferences has to be a list of 3 elements"
         
         for preference in preferences:
             if MovieMatcher.categories.get(preference) is None:
