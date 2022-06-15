@@ -32,7 +32,7 @@ class User(Base):
 
     username = Column(String, primary_key=True)
     email = Column(String, unique=True)
-    preferences = Column(ARRAY(Integer))
+    preferences = Column(ARRAY(String))
     token = Column(String, unique=True)
 
     def to_dict(self):
