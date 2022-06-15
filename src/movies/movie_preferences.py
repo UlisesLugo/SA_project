@@ -1,5 +1,5 @@
-from movies.models import Movie
-from movies.database_session import DatabaseSession
+from models import Movie
+from database_session import DatabaseSession
 
 class MoviePreferences():
     def __init__(self, user_id, rating):

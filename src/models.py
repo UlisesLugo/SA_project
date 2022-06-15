@@ -9,7 +9,7 @@ from sqlalchemy import (
     Float,
     TIMESTAMP,
 )
-from movies.database_session import DatabaseSession
+from database_session import DatabaseSession
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base(

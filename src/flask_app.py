@@ -1,7 +1,7 @@
 import json
+import models
 from flask import Flask, request, json
-from movies import models
-from movies.database_session import DatabaseSession
+from database_session import DatabaseSession
 from movies.movie_preferences import MoviePreferencesBuilder
 
 app = Flask(__name__)
