@@ -8,7 +8,7 @@ class DBInitializer():
     def initialize_db():
         if MovieQueries.movies_empty():
             base_dir = os.path.dirname(os.path.realpath(__file__))
-            with open(f"{base_dir}/movies/movie_results.csv", "r") as movies_csv:
+            with open(f"{base_dir}/movies/raw_data/movie_results.csv", "r") as movies_csv:
                 csv_reader = csv.DictReader(movies_csv, skipinitialspace=True)
                 movies = []
                 for i, row in enumerate(csv_reader):
