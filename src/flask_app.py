@@ -56,7 +56,6 @@ def register():
             .token(token)
             .build())
 
-    print(user)
     result, errorMessage = UserQueries.add_user(user)
 
     if result :
