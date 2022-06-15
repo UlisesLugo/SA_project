@@ -1,5 +1,5 @@
-from movies.movie_preferences import MoviePreferences
-
+from database_session import DatabaseSession
+from models import Movie
 class MoviePreferencesBuilder():
     def __init__(self):
         self._user_preference = None
@@ -15,4 +15,9 @@ class MoviePreferencesBuilder():
     
     def build(self):
         assert self._user_preference is not None and self._rating is not None
-        return MoviePreferences(self._user_preference, self._rating)
+        query = DatabaseSession().query(Movie).filter_by(preference_key=self._user_preference)
+        if self._rating:
+            query = query.order_by(Movie.rating.desc())
+        else:
+            query = query.order_by(Movie.rating)
+        return query.limit(10).all()
