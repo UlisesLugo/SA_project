@@ -19,7 +19,7 @@ def hello_world():
 @app.route("/get_movies", methods=["GET"])
 def get_movies():
     user_id = int(request.args.get("user_id"))
-    rating = request.args.get("rating") in {"True", "true"}
+    rating = not request.args.get("rating") in {"False", "false"}
     
     # logic to get user preference
     user = user_id
@@ -50,18 +50,12 @@ def register():
     user = (UserBuilder()
             .username(username)
             .email(email)
-            .preferences([1,2,3])
+            .preferences(preferences)
             .token(token)
             .build())
 
     result = UserQueries.add_user(user)
-    # Adding something to DB
-    # session.add(models.Movie(movie_id=1, preference_key=3, movie_title="titanic", rating=7.9, year= 1990, create_time=datetime.now()))
-
-    #  Querying to DB
-    # for instance in session.query(models.Movie):
-    #     print(instance.movie_id, instance.movie_title, instance.rating)
-
+    
     if result :
         response = app.response_class(
             response=json.dumps(user.to_dict()),

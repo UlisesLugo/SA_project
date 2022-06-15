@@ -12,11 +12,12 @@ class DBInitializer():
                 csv_reader = csv.DictReader(movies_csv, skipinitialspace=True)
                 movies = []
                 for i, row in enumerate(csv_reader):
-                    movie = (MovieBuilder
+                    movie = (MovieBuilder()
                         .movie_id(i)
                         .preference_key(int(row["preference_key"]))
                         .movie_title(row["movie_title"])
                         .rating(float(row["rating"]))
-                        .year(int(row["year"])))
+                        .year(int(row["year"]))
+                        .build())
                     movies.append(movie)
                 MovieQueries.add_movies(movies)
