@@ -1,4 +1,6 @@
+import csv
 import os
+from datetime import datetime
 from sqlalchemy import (
     MetaData,
     Column,
@@ -10,7 +12,7 @@ from sqlalchemy import (
     create_engine
 )
 from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy.orm import sessionmaker
 
 def get_postgres_uri():
     host = os.environ.get("DB_HOST", "postgres")
@@ -44,3 +46,19 @@ class Movie(Base):
 
 def start_mappers():
     Base.metadata.create_all(engine)
+    
+    with sessionmaker(bind=engine)() as session:
+        if session.query(Movie).first() is None:
+            base_dir = os.path.dirname(os.path.realpath(__file__))
+            with open(f"{base_dir}/movie_results.csv", "r") as movies_csv:
+                csv_reader = csv.DictReader(movies_csv, skipinitialspace=True)
+                for i, row in enumerate(csv_reader):
+                    session.add(Movie(
+                        movie_id=i,
+                        preference_key=int(row["preference_key"]),
+                        movie_title=row["movie_title"],
+                        rating=float(row["rating"]),
+                        year=int(row["year"]),
+                        create_time=datetime.now(),
+                    ))
+            session.commit()
