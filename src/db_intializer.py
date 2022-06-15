@@ -1,7 +1,7 @@
 import os
 import csv
 from datetime import datetime
-from models import Movie
+from movies.movie_builder import MovieBuilder
 from movies.movie_queries import MovieQueries
 
 class DBInitializer():
@@ -12,12 +12,11 @@ class DBInitializer():
                 csv_reader = csv.DictReader(movies_csv, skipinitialspace=True)
                 movies = []
                 for i, row in enumerate(csv_reader):
-                    movies.append(Movie(
-                        movie_id=i,
-                        preference_key=int(row["preference_key"]),
-                        movie_title=row["movie_title"],
-                        rating=float(row["rating"]),
-                        year=int(row["year"]),
-                        create_time=datetime.now(),
-                    ))
+                    movie = (MovieBuilder
+                        .movie_id(i)
+                        .preference_key(int(row["preference_key"]))
+                        .movie_title(row["movie_title"])
+                        .rating(float(row["rating"]))
+                        .year(int(row["year"])))
+                    movies.append(movie)
                 MovieQueries.add_movies(movies)
