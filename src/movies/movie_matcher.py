@@ -11,13 +11,3 @@ class MovieMatcher():
 
     def get_category_mapping(preferences):
         return [ MovieMatcher.categories.get(preference) for preference in preferences]
-
-    def validate_preferences(preferences):
-        if not isinstance(preferences, list) or len(preferences) != 3:
-            return False, "Preferences has to be a list of 3 elements"
-        
-        for preference in preferences:
-            if MovieMatcher.categories.get(preference) is None:
-                return False, preference + " is not a valid preference"
-        
-        return True, ""
