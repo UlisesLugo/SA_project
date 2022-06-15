@@ -33,7 +33,7 @@ class User(Base):
     email = Column(String, unique=True)
     preference_key = Column(Integer)
     token = Column(String, unique=True)
-
-def start_mappers():
-    session = DatabaseSession()
-    Base.metadata.create_all(session.engine)
+class Models():
+    def start_mappers():
+        session = DatabaseSession()
+        Base.metadata.create_all(session.engine)

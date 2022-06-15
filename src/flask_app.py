@@ -1,12 +1,12 @@
 import json
-import models
+from models import Models
 from flask import Flask, request, json
 from database_session import DatabaseSession
 from movies.movie_queries import MovieQueries
 from db_intializer import DBInitializer
 
 app = Flask(__name__)
-models.start_mappers()
+Models.start_mappers()
 DBInitializer.initialize_db()
 
 @app.route("/hello", methods=["GET"])
