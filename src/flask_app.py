@@ -2,7 +2,7 @@ import json
 import models
 from flask import Flask, request, json
 from database_session import DatabaseSession
-from movies.movie_preferences import MoviePreferencesBuilder
+from movies.movie_queries import MovieQueries
 
 app = Flask(__name__)
 models.start_mappers()
@@ -17,10 +17,12 @@ def get_movies():
     user_id = int(request.args.get("user_id"))
     rating = request.args.get("rating") in {"True", "true"}
     
-    movie_prefs_builder = MoviePreferencesBuilder()
-    movie_prefs = movie_prefs_builder.user_id(user_id).rating(rating).build()
-    movies = movie_prefs.get_movies()
-    
+    # logic to get user preference
+    user = user_id
+
+    # logic to get movies for user    
+    movies = MovieQueries.get_movie_matches(user, rating)
+
     response = app.response_class(
         response=json.dumps(list(map(lambda x:x.to_dict(), movies))),
         status=200,
