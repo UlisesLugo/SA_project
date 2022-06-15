@@ -8,6 +8,7 @@ from sqlalchemy import (
     String,
     Float,
     TIMESTAMP,
+    ARRAY
 )
 from database_session import DatabaseSession
 from sqlalchemy.ext.declarative import declarative_base
@@ -34,8 +35,15 @@ class User(Base):
 
     username = Column(String, primary_key=True)
     email = Column(String, unique=True)
-    preference_key = Column(Integer)
+    preferences = Column(ARRAY(Integer))
     token = Column(String, unique=True)
+
+    def to_dict(self):
+        return {"username":self.username, 
+                "email":self.email, 
+                "preferences":self.preferences, 
+                "token":self.token
+                }
 
 def start_mappers():
     session = DatabaseSession()
@@ -43,7 +51,7 @@ def start_mappers():
 
     if session.query(Movie).first() is None:
         base_dir = os.path.dirname(os.path.realpath(__file__))
-        with open(f"{base_dir}/movie_results.csv", "r") as movies_csv:
+        with open(f"{base_dir}/movies/movie_results.csv", "r") as movies_csv:
             csv_reader = csv.DictReader(movies_csv, skipinitialspace=True)
             for i, row in enumerate(csv_reader):
                 session.add(Movie(

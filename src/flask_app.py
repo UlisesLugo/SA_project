@@ -1,8 +1,10 @@
 import json
 import models
 from flask import Flask, request, json
-from database_session import DatabaseSession
 from movies.movie_preferences import MoviePreferencesBuilder
+from users.token_generator import generate_token
+from users.user_builder import UserBuilder
+from users.user_queries import UserQueries
 
 app = Flask(__name__)
 models.start_mappers()
@@ -32,7 +34,6 @@ def get_movies():
 @app.route("/register", methods=["POST"])
 def register():
     args = request.json
-    session = DatabaseSession()
 
     username = args.get('username')
     email = args.get('email')
@@ -41,6 +42,15 @@ def register():
     if(username is None or email is None or preferences is None):
         return 'Username, email and preferences are required for registering', 400
 
+    token = generate_token()
+    user = (UserBuilder()
+            .username(username)
+            .email(email)
+            .preferences([1,2,3])
+            .token(token)
+            .build())
+
+    result = UserQueries.add_user(user)
     # Adding something to DB
     # session.add(models.Movie(movie_id=1, preference_key=3, movie_title="titanic", rating=7.9, year= 1990, create_time=datetime.now()))
 
@@ -48,4 +58,13 @@ def register():
     # for instance in session.query(models.Movie):
     #     print(instance.movie_id, instance.movie_title, instance.rating)
 
-    return "This is register :)", 200
+    if result :
+        response = app.response_class(
+            response=json.dumps(user.to_dict()),
+            status=200,
+            mimetype='application/json'
+        )
+    else:
+        response = "Username duplicated, please change", 400
+
+    return response
