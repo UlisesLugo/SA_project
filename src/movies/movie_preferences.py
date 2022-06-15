@@ -6,7 +6,7 @@ class MoviePreferences():
         self.user_id = user_id
         self.rating = rating
     
-    def get_movies(self):
+    def get_movies_list(self):
         query = DatabaseSession().query(Movie).filter_by(preference_key=self.user_id)
         if self.rating:
             query = query.order_by(Movie.rating.desc())
@@ -16,11 +16,11 @@ class MoviePreferences():
 
 class MoviePreferencesBuilder():
     def __init__(self):
-        self._user_id = None
+        self._user_preference = None
         self._rating = None
     
-    def user_id(self, user_id):
-        self._user_id = user_id
+    def user_preference(self, user_preference):
+        self._user_preference = user_preference
         return self
 
     def rating(self, rating):

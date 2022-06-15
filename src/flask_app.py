@@ -1,13 +1,15 @@
 import json
-import models
+from models import Models
 from flask import Flask, request, json
-from movies.movie_preferences import MoviePreferencesBuilder
 from users.token_generator import generate_token
 from users.user_builder import UserBuilder
 from users.user_queries import UserQueries
+from movies.movie_queries import MovieQueries
+from db_intializer import DBInitializer
 
 app = Flask(__name__)
-models.start_mappers()
+Models.start_mappers()
+DBInitializer.initialize_db()
 
 @app.route("/hello", methods=["GET"])
 def hello_world():
@@ -19,10 +21,12 @@ def get_movies():
     user_id = int(request.args.get("user_id"))
     rating = request.args.get("rating") in {"True", "true"}
     
-    movie_prefs_builder = MoviePreferencesBuilder()
-    movie_prefs = movie_prefs_builder.user_id(user_id).rating(rating).build()
-    movies = movie_prefs.get_movies()
-    
+    # logic to get user preference
+    user = user_id
+
+    # logic to get movies for user    
+    movies = MovieQueries.get_movie_matches(user, rating)
+
     response = app.response_class(
         response=json.dumps(list(map(lambda x:x.to_dict(), movies))),
         status=200,
