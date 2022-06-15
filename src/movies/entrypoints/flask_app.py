@@ -2,24 +2,31 @@ import json
 from flask import Flask, request, json
 from movies import models
 from datetime import datetime
-
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from movies.movie_preferences import MoviePreferencesBuilder
 
 app = Flask(__name__)
 models.start_mappers()
 
-DEFAULT_SESSION_FACTORY = sessionmaker(
-    bind=create_engine(
-        models.get_postgres_uri(),
-        isolation_level="REPEATABLE READ",
-    )
-)
-session = DEFAULT_SESSION_FACTORY()
-
 @app.route("/hello", methods=["GET"])
 def hello_world():
     return "Hello World!", 200
+
+
+@app.route("/get_movies", methods=["GET"])
+def get_movies():
+    user_id = int(request.args.get("user_id"))
+    rating = request.args.get("rating") in {"True", "true"}
+    
+    movie_prefs_builder = MoviePreferencesBuilder()
+    movie_prefs = movie_prefs_builder.user_id(user_id).rating(rating).build()
+    movies = movie_prefs.get_movies()
+    
+    response = app.response_class(
+        response=json.dumps(list(map(lambda x:x.to_dict(), movies))),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
 
 @app.route("/register", methods=["POST"])
