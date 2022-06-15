@@ -11,7 +11,7 @@ class UserQueries():
         except Exception as e:
             session.rollback()
             if "username" in str(e.__cause__):
-                return False, "Username is duplicated, please change."
+                return False, "username already exists, please change."
             if "email" in str(e.__cause__):
-                return False, "Email already exists, please change."
-            return False, "Error creating user, please try again."
+                return False, "email already exists, please change."
+            return False, "error creating user, please try again."
