@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request, json
 from movies import models
-from datetime import datetime
+from movies.database_session import DatabaseSession
 from movies.movie_preferences import MoviePreferencesBuilder
 
 app = Flask(__name__)
@@ -32,6 +32,7 @@ def get_movies():
 @app.route("/register", methods=["POST"])
 def register():
     args = request.json
+    session = DatabaseSession()
 
     username = args.get('username')
     email = args.get('email')

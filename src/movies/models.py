@@ -9,7 +9,7 @@ from sqlalchemy import (
     Float,
     TIMESTAMP,
 )
-from database_session import DatabaseSession
+from movies.database_session import DatabaseSession
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base(
@@ -29,6 +29,13 @@ class Movie(Base):
     def to_dict(self):
         return {"movie_title":self.movie_title, "preference_key":self.preference_key, "rating":self.rating}
 
+class User(Base):
+    __tablename__ = "users"
+
+    username = Column(String, primary_key=True)
+    email = Column(String, unique=True)
+    preference_key = Column(Integer)
+    token = Column(String, unique=True)
 
 def start_mappers():
     session = DatabaseSession()

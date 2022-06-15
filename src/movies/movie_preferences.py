@@ -1,4 +1,4 @@
-from models import Movie
+from movies.models import Movie
 from movies.database_session import DatabaseSession
 
 class MoviePreferences():
