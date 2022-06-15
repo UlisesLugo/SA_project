@@ -19,7 +19,7 @@ def hello_world():
 @app.route("/get_movies", methods=["GET"])
 def get_movies():
     user_id = int(request.args.get("user_id"))
-    rating = request.args.get("rating") in {"True", "true"}
+    rating = not request.args.get("rating") in {"False", "false"}
     
     # logic to get user preference
     user = user_id
