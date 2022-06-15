@@ -19,13 +19,13 @@ def hello_world():
 
 @app.route("/get_movies", methods=["GET"])
 def get_movies():
-    user_id = int(request.args.get("user_id"))
+    user_token = request.args.get("user_token")
     rating = not request.args.get("rating") in {"False", "false"}
     
-    # logic to get user preference
-    user = user_id
-
-    # logic to get movies for user    
+    user = UserQueries.get_user(user_token)
+    if user is None:
+        return "Invalid user token.", 401
+    
     movies = MovieQueries.get_movie_matches(user, rating)
 
     response = app.response_class(
