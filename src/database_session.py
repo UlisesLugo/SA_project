@@ -11,6 +11,8 @@ class DatabaseSessionSingletonMeta(type):
             cls._instance = instance
         return cls._instance
 
+# This class applies the Liskov Substitution Principle (LSP)
+# DatabaseSession can be used as a normal Session anywhere in the code and it would still work as expected
 class DatabaseSession(Session, metaclass=DatabaseSessionSingletonMeta):
     def _get_postgres_uri(self):
         host = os.environ.get("DB_HOST", "postgres")

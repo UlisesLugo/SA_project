@@ -1,5 +1,7 @@
 from movies.movie_matcher import MovieMatcher
 
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to validate the information of a User
 class UserValidator():
     def validate(username, email, preferences):
 

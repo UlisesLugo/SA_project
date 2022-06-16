@@ -4,9 +4,11 @@ from datetime import datetime
 from movies.movie_builder import MovieBuilder
 from movies.movie_queries import MovieQueries
 
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to initialize the DB
 class DBInitializer():
     def initialize_db():
-        if MovieQueries.movies_empty():
+        if MovieQueries.is_empty():
             base_dir = os.path.dirname(os.path.realpath(__file__))
             with open(f"{base_dir}/movies/raw_data/movie_results.csv", "r") as movies_csv:
                 csv_reader = csv.DictReader(movies_csv, skipinitialspace=True)
@@ -20,4 +22,4 @@ class DBInitializer():
                         .year(int(row["year"]))
                         .build())
                     movies.append(movie)
-                MovieQueries.add_movies(movies)
+                MovieQueries.create_many(movies)

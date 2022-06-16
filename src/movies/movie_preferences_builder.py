@@ -1,5 +1,8 @@
 from database_session import DatabaseSession
 from models import Movie
+
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to build the MoviePreference query object
 class MoviePreferencesBuilder():
     def __init__(self):
         self._user_preference = None

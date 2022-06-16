@@ -1,6 +1,8 @@
 from datetime import datetime
 import models
 
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to build the Movie model object
 class MovieBuilder():
     def __init__(self):
         self._movie_id = None

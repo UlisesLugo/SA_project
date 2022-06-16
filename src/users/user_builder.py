@@ -1,5 +1,7 @@
 import models
 
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to build the User model object
 class UserBuilder():
     def __init__(self):
         self._username = None

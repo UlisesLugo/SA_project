@@ -1,6 +1,9 @@
 from array import array
 from movies.movie_preferences_builder import MoviePreferencesBuilder
 from functools import reduce
+
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to run the algorithm for calculating the preference key of the user
 class MovieMatcher():
     categories = { "comedy": 1, "drama": 2, "sci-fi": 3, "romantic": 4, "adventure": 5}
     

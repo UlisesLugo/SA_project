@@ -1,12 +1,15 @@
 import json
-from models import Models
 from flask import Flask, request, json
-from users.token_generator import generate_token
+from db_intializer import DBInitializer
+
+from models import Models
+
+from users.token_generator import TokenGenerator
 from users.user_builder import UserBuilder
 from users.user_queries import UserQueries
 from users.user_validator import UserValidator
+
 from movies.movie_queries import MovieQueries
-from db_intializer import DBInitializer
 
 app = Flask(__name__)
 Models.start_mappers()
@@ -22,7 +25,7 @@ def get_movies():
     user_token = request.args.get("user_token")
     rating = not request.args.get("rating") in {"False", "false"}
     
-    user = UserQueries.get_user(user_token)
+    user = UserQueries.read_one(user_token)
     if user is None:
         return "Invalid user token.", 401
     
@@ -48,7 +51,7 @@ def register():
     if not isValidUser:
         return errorUser, 400
 
-    token = generate_token()
+    token = TokenGenerator.generate_token()
     user = (UserBuilder()
             .username(username)
             .email(email)
@@ -56,7 +59,7 @@ def register():
             .token(token)
             .build())
 
-    result, errorMessage = UserQueries.add_user(user)
+    result, errorMessage = UserQueries.create_one(user)
 
     if result :
         response = app.response_class(

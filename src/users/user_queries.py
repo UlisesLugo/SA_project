@@ -1,7 +1,11 @@
+from crud_interfaces import CreateObjectInterface, ReadObjectInterface
 from database_session import DatabaseSession
 from models import User
-class UserQueries():
-    def add_user(user):
+
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to query the User model
+class UserQueries(CreateObjectInterface, ReadObjectInterface):
+    def create_one(user):
         session = DatabaseSession()
 
         try:
@@ -16,6 +20,6 @@ class UserQueries():
                 return False, "email already exists, please change."
             return False, "error creating user, please try again."
 
-    def get_user(token):
+    def read_one(token):
         session = DatabaseSession()
         return session.query(User).filter_by(token=token).first()

@@ -42,6 +42,8 @@ class User(Base):
                 "token":self.token
                 }
 
+# This class applies the Single Responsibility Principle (SRP)
+# Its only objective is to define the database models
 class Models():
     def start_mappers():
         session = DatabaseSession()
