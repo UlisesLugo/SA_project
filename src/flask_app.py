@@ -14,8 +14,6 @@ from movies.movie_queries import MovieQueries
 app = Flask(__name__)
 Models.start_mappers()
 DBInitializer.initialize_db()
-from movies.raw_data.fetcher import main
-main()
 
 @app.route("/hello", methods=["GET"])
 def hello_world():
