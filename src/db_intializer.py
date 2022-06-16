@@ -3,6 +3,8 @@ import csv
 from datetime import datetime
 from movies.movie_builder import MovieBuilder
 from movies.movie_queries import MovieQueries
+from users.user_queries import UserQueries
+from users.user_builder import UserBuilder
 
 # This class applies the Single Responsibility Principle (SRP)
 # Its only objective is to initialize the DB
@@ -23,3 +25,12 @@ class DBInitializer():
                         .build())
                     movies.append(movie)
                 MovieQueries.create_many(movies)
+        
+        if UserQueries.is_empty():
+            user = (UserBuilder()
+                .username("test_user")
+                .email("hello@test.com")
+                .preferences(["comedy","romantic","adventure"])
+                .token("dummy_T0k3n")
+                .build())
+            UserQueries.create_one(user)

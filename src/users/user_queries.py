@@ -23,3 +23,7 @@ class UserQueries(CreateObjectInterface, ReadObjectInterface):
     def read_one(token):
         session = DatabaseSession()
         return session.query(User).filter_by(token=token).first()
+
+    def is_empty():
+        session = DatabaseSession()
+        return session.query(User).first() is None

@@ -12,7 +12,7 @@ class MovieMatcher():
     
     def _compute_preference_number(user):
         user_prefs = user.preferences
-        pref_num = reduce(lambda x,y: x*y, MovieMatcher._get_category_mapping(user_prefs)) % 5
+        pref_num = reduce(lambda x,y: x*y, MovieMatcher._get_category_mapping(user_prefs)) % 5 + 1
         return pref_num
 
     def get_movie_preferences(user, rating):
